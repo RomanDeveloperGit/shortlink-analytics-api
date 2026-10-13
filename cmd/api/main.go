@@ -7,6 +7,8 @@ import (
 	"syscall"
 	"time"
 
+	"google.golang.org/grpc"
+
 	"github.com/RomanDeveloperGit/shortlink-analytics-api/internal/config"
 	"github.com/RomanDeveloperGit/shortlink-analytics-api/internal/infra/db"
 	"github.com/RomanDeveloperGit/shortlink-analytics-api/internal/logger"
@@ -15,7 +17,6 @@ import (
 	"github.com/RomanDeveloperGit/shortlink-analytics-api/internal/transport/grpcserver"
 	"github.com/RomanDeveloperGit/shortlink-analytics-api/internal/transport/grpcserver/interceptor"
 	"github.com/RomanDeveloperGit/shortlink-analytics-api/internal/transport/grpcserver/register"
-	"google.golang.org/grpc"
 )
 
 func main() {
@@ -56,7 +57,7 @@ func main() {
 		Port:        cfg.GRPCServer.Port,
 		IdleTimeout: cfg.GRPCServer.IdleTimeout,
 		Logger:      log,
-		Registers:   []func(*grpc.Server){
+		Registers: []func(*grpc.Server){
 			registerAnalyticsService,
 		},
 		Interceptors: []grpc.UnaryServerInterceptor{
@@ -67,9 +68,9 @@ func main() {
 		},
 	})
 
-	time.Sleep(1 * time.Millisecond)
-
 	go grpcServer.Start()
+
+	time.Sleep(1 * time.Millisecond)
 
 	log.Info("server started")
 

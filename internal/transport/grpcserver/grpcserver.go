@@ -10,8 +10,6 @@ import (
 	"google.golang.org/grpc/keepalive"
 )
 
-// import "github.com/RomanDeveloperGit/shortlink-protos/gen/go/shortlink/analytics/v1"
-
 type Options struct {
 	Host         string
 	Port         int

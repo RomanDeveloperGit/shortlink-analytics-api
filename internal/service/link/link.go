@@ -19,8 +19,15 @@ type LinkStats struct {
 }
 
 type LinkRepository interface {
-	GetLinkCreatedEventsWithUnexpiredStatusAndWithAuthorEmail(ctx context.Context, from, to time.Time) ([]model.LinkCreatedEvent, error)
-	GetLinkVisitedEventsByLinkIDs(ctx context.Context, from, to time.Time, linkIDs []int) ([]model.LinkVisitedEvent, error)
+	GetLinkCreatedEventsWithUnexpiredStatusAndWithAuthorEmail(
+		ctx context.Context,
+		from, to time.Time,
+	) ([]model.LinkCreatedEvent, error)
+	GetLinkVisitedEventsByLinkIDs(
+		ctx context.Context,
+		from, to time.Time,
+		linkIDs []int,
+	) ([]model.LinkVisitedEvent, error)
 }
 
 type service struct {
@@ -64,7 +71,11 @@ func (s *service) GetStatsByAuthorsInPeriod(
 	ctx context.Context,
 	from, to time.Time,
 ) (map[string][]LinkStats, error) {
-	linkCreatedEvents, err := s.linkRepository.GetLinkCreatedEventsWithUnexpiredStatusAndWithAuthorEmail(ctx, from, to)
+	linkCreatedEvents, err := s.linkRepository.GetLinkCreatedEventsWithUnexpiredStatusAndWithAuthorEmail(
+		ctx,
+		from,
+		to,
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get link created events: %v", err)
 	}
@@ -75,13 +86,20 @@ func (s *service) GetStatsByAuthorsInPeriod(
 		uniqueLinkIDs = append(uniqueLinkIDs, int(event.LinkID))
 	}
 
-	linkVisitedEvents, err := s.linkRepository.GetLinkVisitedEventsByLinkIDs(ctx, from, to, uniqueLinkIDs)
+	linkVisitedEvents, err := s.linkRepository.GetLinkVisitedEventsByLinkIDs(
+		ctx,
+		from,
+		to,
+		uniqueLinkIDs,
+	)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get link visited events: %v", err)
 	}
 
 	linkVisitedEventsMapByLinkID := s.convertLinkVisitedEventsToMapByLinkIDCount(linkVisitedEvents)
-	linkCreatedEventsMapByAuthorEmail := s.convertLinkCreatedEventsToMapByAuthorEmail(linkCreatedEvents)
+	linkCreatedEventsMapByAuthorEmail := s.convertLinkCreatedEventsToMapByAuthorEmail(
+		linkCreatedEvents,
+	)
 
 	result := make(map[string][]LinkStats, len(linkCreatedEventsMapByAuthorEmail))
 

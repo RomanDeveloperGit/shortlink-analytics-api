@@ -3,9 +3,10 @@ package interceptor
 import (
 	"context"
 
-	"github.com/RomanDeveloperGit/shortlink-analytics-api/internal/pkg/observability"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+
+	"github.com/RomanDeveloperGit/shortlink-analytics-api/internal/pkg/observability"
 )
 
 func TraceID() grpc.UnaryServerInterceptor {

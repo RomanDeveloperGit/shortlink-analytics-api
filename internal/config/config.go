@@ -17,9 +17,9 @@ type Config struct {
 }
 
 type GRPCServer struct {
-	Host         string        `env:"GRPC_HOST,required,notEmpty"`
-	Port         int           `env:"GRPC_PORT,required,notEmpty"`
-	IdleTimeout  time.Duration `env:"GRPC_IDLE_TIMEOUT,required,notEmpty"`
+	Host        string        `env:"GRPC_HOST,required,notEmpty"`
+	Port        int           `env:"GRPC_PORT,required,notEmpty"`
+	IdleTimeout time.Duration `env:"GRPC_IDLE_TIMEOUT,required,notEmpty"`
 }
 
 type ClickHouse struct {

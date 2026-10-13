@@ -32,15 +32,13 @@ func (r *repository) GetLinkCreatedEventsWithUnexpiredStatusAndWithAuthorEmail(
 			expires_at,
 			created_at
 		FROM link_created_event
-		WHERE expires_at >= ?
-		AND expires_at <= ?
-		AND created_at >= ?
-		AND created_at <= ?
+		WHERE created_at <= ?
+		AND expires_at >= ?
 		AND author_email IS NOT NULL
 		ORDER BY created_at
 	`
 
-	err := r.db.Select(ctx, &events, q, from, to, from, to)
+	err := r.db.Select(ctx, &events, q, to, from)
 	if err != nil {
 		return nil, err
 	}
